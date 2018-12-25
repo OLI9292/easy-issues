@@ -11,12 +11,11 @@ const ID = process.env.GITHUB_CLIENT_ID
 const SECRET = process.env.GITHUB_CLIENT_SECRET
 const AUTH = `client_id=${ID}&client_secret=${SECRET}`
 
-const fetchRepos = (organization, perPage = 100, page = 1) =>
-  axios
-    .get(
-      `${GITHUB_API_URL}orgs/${organization}/repos?page=${page}&per_page=${perPage}&${AUTH}`
-    )
-    .then(res => res.data)
+const fetchRepos = (organization, perPage = 100, page = 1) => {
+  console.log("requesting " + url)
+  const url = `${GITHUB_API_URL}orgs/${organization}/repos?page=${page}&per_page=${perPage}&${AUTH}`
+  return axios.get(url).then(res => res.data)
+}
 
 const fetchIssues = async repo => {
   const name = repo.full_name
