@@ -12,8 +12,8 @@ const SECRET = process.env.GITHUB_CLIENT_SECRET
 const AUTH = `client_id=${ID}&client_secret=${SECRET}`
 
 const fetchRepos = (organization, perPage = 100, page = 1) => {
-  console.log("requesting " + url)
   const url = `${GITHUB_API_URL}orgs/${organization}/repos?page=${page}&per_page=${perPage}&${AUTH}`
+  console.log("requesting " + url)
   return axios.get(url).then(res => res.data)
 }
 
