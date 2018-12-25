@@ -10,7 +10,7 @@ const IssueModel = require("../models/issue")
 const { DATABASE_URL, DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOST } = process.env
 
 const db = process.env.DATABASE_URL
-  ? new Sequelize(DATABASE_URL)
+  ? new Sequelize(DATABASE_URL, { logging: false })
   : new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
       host: DB_HOST,
       logging: false,
