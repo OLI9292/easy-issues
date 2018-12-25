@@ -13,7 +13,7 @@ const AUTH = `client_id=${ID}&client_secret=${SECRET}`
 
 const fetchRepos = (organization, perPage = 100, page = 1) => {
   const url = `${GITHUB_API_URL}orgs/${organization}/repos?page=${page}&per_page=${perPage}&${AUTH}`
-  console.log("requesting " + url)
+  console.log("requesting " + organization)
   return axios.get(url).then(res => res.data)
 }
 
@@ -82,7 +82,7 @@ const run = async name => {
   try {
     let repos = await fetchRepos(name)
 
-    repos = repos.filter(activeRepo).slice(0, 20)
+    repos = repos.filter(activeRepo).slice(0, 20) // To save on API calls, but ideally remove slice()
     repos = await Promise.all(repos.map(fetchIssues))
     repos = repos.filter(({ issues }) => issues.length).map(cleanRepo)
 
@@ -95,19 +95,21 @@ const run = async name => {
     const include = [{ model: Repo, include: [Issue] }]
 
     Org.create(params, { include }).then(org => {
-      const issuesCount = org.repos[0].issues.length
+      const issuesCount = org.repos
+        .map(({ issues }) => issues.length)
+        .reduce((a, b) => a + b, 0)
       console.log(`scraped ${name}, found ${issuesCount} issues`)
       return org
     })
   } catch (error) {
-    console.log("Error: " + error.message)
+    console.log("Error: " + error)
     return
   }
 }
 
 // run process.argv[1]
 ;(async () => {
-  for (const name of organizations) {
+  for (const name of organizations.slice(100, 200)) {
     await run(name)
   }
   console.log("DONE")
