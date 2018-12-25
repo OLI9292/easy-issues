@@ -7,23 +7,22 @@ const OrgModel = require("../models/org")
 const RepoModel = require("../models/repo")
 const IssueModel = require("../models/issue")
 
-const db = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    logging: false,
-    dialect: "postgres",
-    operatorsAliases: false,
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
-    }
-  }
-)
+const { DATABASE_URL, DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOST } = process.env
+
+const db = process.env.DATABASE_URL
+  ? new Sequelize(DATABASE_URL)
+  : new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
+      host: DB_HOST,
+      logging: false,
+      dialect: "postgres",
+      operatorsAliases: false,
+      pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      }
+    })
 
 const Repo = RepoModel(db, Sequelize)
 const Org = OrgModel(db, Sequelize)
