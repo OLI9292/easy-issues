@@ -22,8 +22,5 @@ app.delete("/api/orgs/:id", (req, res) => {
   Org.destroy({ where: { id: req.params.id } }).then(data => res.json(data))
 })
 
-const PORT = 3004
-
-app.listen(PORT, () => {
-  console.log(`listening on http://localhost:${PORT}`)
-})
+const PORT = process.env.PORT || 3004
+app.listen(PORT, () => console.log("listening on " + PORT))
