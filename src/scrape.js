@@ -102,7 +102,7 @@ const run = async name => {
     })
   } catch (error) {
     console.log("Error: " + error.message)
-    return process.exit(1)
+    return
   }
 }
 
